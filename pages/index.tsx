@@ -6,7 +6,6 @@ import {
   Collapse,
   IconButton,
   MenuItem,
-  Paper,
   SelectChangeEvent,
   Table,
   TableBody,
@@ -23,6 +22,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Exercise, ExerciseResponse, MuscleTypesResponse } from '../types/wger.type'
 import { StyledSelect } from '../components/StyledSelect'
 import { StyledFormLabel } from '../components/StyledFormLabel'
+import { CardWithTitle } from '../components/CardWithTitle'
 
 
 const baseUrl = 'https://wger.de'
@@ -61,88 +61,82 @@ const Home: NextPage<StaticProps> = ({ muscles }) => {
       </Head>
 
       <Box sx={{ height: '100vh', backgroundColor: 'rgb(26, 34, 56)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Paper elevation={10} sx={{ overflow: 'hidden', width: '50vw', maxHeight: '90%', borderRadius: '20px', boxShadow: '2px 2px 20px white' }}>
-          <Box sx={{ padding: '28px' }}>
-            <Typography variant='h4' sx={{ fontWeight: 'bold', color: 'rgb(26, 34, 56)'}}>
-              Exercises by muscle group
-            </Typography>
-            <Box sx={{height: '100%'}}>
-              <Box sx={{ marginY: '20px' }}>
-                <StyledFormLabel id='muscle-select-label'>Muscle Group</StyledFormLabel>
-                <StyledSelect
-                  renderValue={(value) => {
-                    const muscleId = value as number | ''
-                    if (muscles.length > 0) {
-                      if (muscleId !== '') {
-                        const targetMuscle = muscles.filter(muscle => muscle.id === muscleId)?.[0]
-                        return targetMuscle
-                          ? targetMuscle.name_en
-                            ? targetMuscle.name_en
-                            : targetMuscle.name
-                          : 'No muscle groups available'
-                      }
-                      return 'Choose a muscle group to see available exercises'
-                    }
-                    return 'No muscle groups available'
-                  }}
-                  displayEmpty
-                  labelId='muscle-select-label'
-                  value={muscles.map(muscle => muscle.id).filter(id => id === selectedMuscleGroupId)?.[0] ?? ''}
-                  onChange={handleMuscleSelection}
-                >
-                  <MenuItem key='dummy-muscle-group' disabled>Please choose a muscle group</MenuItem>
-                  {
-                    muscles.map(muscle => (
-                      <MenuItem key={`${muscle.name}-muscle-group`} value={muscle.id}>{muscle.name_en ? muscle.name_en : muscle.name}</MenuItem>
-                    ))
+        <CardWithTitle title='Exercises by muscle group'>
+          <Box sx={{ marginY: '20px' }}>
+            <StyledFormLabel id='muscle-select-label'>Muscle Group</StyledFormLabel>
+            <StyledSelect
+              inputProps={{"data-testid": "select"}}
+              renderValue={(value) => {
+                const muscleId = value as number | ''
+                if (muscles.length > 0) {
+                  if (muscleId !== '') {
+                    const targetMuscle = muscles.filter(muscle => muscle.id === muscleId)?.[0]
+                    return targetMuscle
+                      ? targetMuscle.name_en
+                        ? targetMuscle.name_en
+                        : targetMuscle.name
+                      : 'No muscle groups available'
                   }
-                </StyledSelect>
-              </Box>
-              { selectedMuscleGroupId ?
-                  <Box sx={{ height: '100%'}}>
-                    <Typography>Click through rows to explore an exercise&apos;s description</Typography>
-                    <TableContainer sx={{ overflow: 'auto', maxHeight: 400, marginY: '20px', border: '1px solid black' }} >
-                      <Table style={{ overflow: 'auto', height: '100%'}} sx={{ overflow: 'auto', height: '100%'}} aria-label='exercise-table'>
-                        <TableHead>
-                          <TableRow key={'header-row'}>
-                            <TableCell key={'empty-col'} />
-                            <TableCell key={'exercise-col'} sx={{ fontWeight: 'bold'}}>Exercise</TableCell>
-                            <TableCell key={'muscles-col'} sx={{ fontWeight: 'bold'}}>Other Muscle Groups Exercised</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {exercises.map(exercise => (
-                            <Fragment key={`${exercise.uuid}-fragment`}>
-                              <TableRow key={exercise.uuid} onClick={() => handleRowExpansion(exercise.name)}>
-                                <TableCell key={`${exercise.uuid}-dropdown`}>
-                                  <IconButton aria-label='expand row' size='small'>
-                                    {expanded === exercise.name ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                                  </IconButton>
-                                </TableCell>
-                                <TableCell key={`${exercise.uuid}-name`} component='th' scope='row'>{exercise.name}</TableCell>
-                                <TableCell key={`${exercise.uuid}-muscles`}>{muscles.filter(muscle => [...exercise.muscles, ...exercise.muscles_secondary].includes(muscle.id) && muscle.id !== selectedMuscleGroupId).map(muscle => muscle.name_en ? muscle.name_en : muscle.name).join(', ')}</TableCell>
-                              </TableRow>
-                              <TableRow key={`${exercise.uuid}-description`}>
-                                <TableCell key={`${exercise.uuid}-description-cell`} style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-                                  <Collapse in={expanded === exercise.name} timeout='auto' unmountOnExit>
-                                    <Box sx={{ margin: 1}}>
-                                        <Typography fontWeight='bold'>Description</Typography>
-                                        <div dangerouslySetInnerHTML={exercise.description !== '' ? { __html: exercise.description } : { __html: 'No description' } } />
-                                    </Box>
-                                  </Collapse>
-                                </TableCell>
-                              </TableRow>
-                            </Fragment>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Box>
-                  : <Typography>No muscle group selected</Typography>
+                  return 'Choose a muscle group to see available exercises'
+                }
+                return 'No muscle groups available'
+              }}
+              displayEmpty
+              labelId='muscle-select-label'
+              value={muscles.map(muscle => muscle.id).filter(id => id === selectedMuscleGroupId)?.[0] ?? ''}
+              onChange={handleMuscleSelection}
+            >
+              <MenuItem key='dummy-muscle-group' disabled>Please choose a muscle group</MenuItem>
+              {
+                muscles.map(muscle => (
+                  <MenuItem data-testid='menu-item' key={`${muscle.name}-muscle-group`} value={muscle.id}>{muscle.name_en ? muscle.name_en : muscle.name}</MenuItem>
+                ))
               }
-            </Box>
+            </StyledSelect>
           </Box>
-        </Paper>
+          { selectedMuscleGroupId ?
+              <Box sx={{ height: '100%'}}>
+                <Typography>Click through rows to explore an exercise&apos;s description</Typography>
+                <TableContainer sx={{ overflow: 'auto', maxHeight: 400, marginY: '20px', border: '1px solid black' }} >
+                  <Table style={{ overflow: 'auto', height: '100%'}} sx={{ overflow: 'auto', height: '100%'}} aria-label='exercise-table'>
+                    <TableHead>
+                      <TableRow key={'header-row'}>
+                        <TableCell key={'empty-col'} />
+                        <TableCell key={'exercise-col'} sx={{ fontWeight: 'bold'}}>Exercise</TableCell>
+                        <TableCell key={'muscles-col'} sx={{ fontWeight: 'bold'}}>Other Muscle Groups Exercised</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {exercises.map(exercise => (
+                        <Fragment key={`${exercise.uuid}-fragment`}>
+                          <TableRow key={exercise.uuid} onClick={() => handleRowExpansion(exercise.name)}>
+                            <TableCell key={`${exercise.uuid}-dropdown`}>
+                              <IconButton aria-label='expand row' size='small'>
+                                {expanded === exercise.name ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                              </IconButton>
+                            </TableCell>
+                            <TableCell key={`${exercise.uuid}-name`} component='th' scope='row'>{exercise.name}</TableCell>
+                            <TableCell key={`${exercise.uuid}-muscles`}>{muscles.filter(muscle => [...exercise.muscles, ...exercise.muscles_secondary].includes(muscle.id) && muscle.id !== selectedMuscleGroupId).map(muscle => muscle.name_en ? muscle.name_en : muscle.name).join(', ')}</TableCell>
+                          </TableRow>
+                          <TableRow key={`${exercise.uuid}-description`}>
+                            <TableCell key={`${exercise.uuid}-description-cell`} style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                              <Collapse in={expanded === exercise.name} timeout='auto' unmountOnExit>
+                                <Box sx={{ margin: 1}}>
+                                    <Typography fontWeight='bold'>Description</Typography>
+                                    <div dangerouslySetInnerHTML={exercise.description !== '' ? { __html: exercise.description } : { __html: 'No description' } } />
+                                </Box>
+                              </Collapse>
+                            </TableCell>
+                          </TableRow>
+                        </Fragment>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+              : <Typography>No muscle group selected</Typography>
+          }
+        </CardWithTitle>
       </Box>
     </div>
   )

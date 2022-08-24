@@ -1,22 +1,12 @@
-import { alpha, Box, CircularProgress, Select, SelectProps, styled } from '@mui/material'
+import { alpha, Box, Select, SelectProps, styled } from '@mui/material'
 import { FC, PropsWithChildren } from 'react'
 
-interface StyledSelectProps extends SelectProps {
-  loading?: boolean
-}
-
-export const StyledSelect: FC<PropsWithChildren<StyledSelectProps>> = ({ children, loading, ...props}) => {
-
+export const StyledSelect: FC<PropsWithChildren<SelectProps>> = ({ children, ...props}) => {
   return (
     <Box sx={{ position: 'relative'}}>
     <StyledComponent {...props}>
       {children}
     </StyledComponent>
-    { loading &&
-    <Box sx={{ position: 'absolute', marginTop: '3px', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', top: '0px' }}>
-      <CircularProgress color='inherit' size='20px' sx={{ position: 'relative' }} />
-    </Box>
-    }
   </Box>
   )
 }
@@ -31,7 +21,7 @@ const StyledComponent = styled(Select)(({
     }
   },
   '&.Mui-disabled': {
-    backgroundColor: alpha('#A59B91', 0.2),
+    backgroundColor: alpha('#dddddd', 0.2),
     'fieldset': {
       borderWidth: '0px'
     }
