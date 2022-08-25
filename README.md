@@ -20,6 +20,7 @@ Please access it on a laptop / desktop, it will be super squished on mobile.
 
 ## Features 💫
 - Material UI was used to give us an out-of-the-box design system that is customiseable (I'm also used to it)
+- Unit testing for significant components using react testing library and jest
 - Vercel is hooked up with GitHub and deploys on push
 - yarn test will run a few (sadly incomplete) testing suites on `yarn test` - try it
 - A controlled expandable-row table was used in order to only display one Exercise at a time. This is to make sure that the user does not get overwhelmed with too much information that gets littered on screen.
@@ -27,7 +28,7 @@ Please access it on a laptop / desktop, it will be super squished on mobile.
 
 ## Nice to haves 🛠
 I would have liked to do a lot more. Here is a list of things that need to be tidied up or done better.
-- *MUST HAVE*: I ran out of time during test coverage. A lot more unit testing is necessary. Integration testing would be nice.
+- Integration and end-to-end testing would be nice.
 - Refactoring of client calls (fetch) and API paths that are parameterised. Language is currently hard coded to only request English results. It would be good to similarly prerender the possible language just like I have done for the Muscle groups and pass them into the props.
 - Refactoring of bigger components such as the Table is necessary to achieve better readability and code reuse.
 - I noticed that the `/muscle` WGER endoint also returns svg resources that illustrate where the muscle groups are in the human body. I also noticed they are each of the same dimension. This means that you could superimpose all of the svgs and create a sketch of the whole body. Then, based on the user's selection, you could change the colour of an svg group to highlight the parts of the body to be trained.
