@@ -35,3 +35,4 @@ I would have liked to do a lot more. Here is a list of things that need to be ti
 - Caching - a lot of API calls are repeated whenever the User navigates between muscle groups. This could easily be prevented by using a caching Node package like memory-cache or Redis for a more robust solution.
 - Pagination - I am currently throwing out any results with a count greater than 20 from the WGER API. I would use the MUI Table component's pagination feature with the `next` and `previous` fields in the WGER API to allow the user to fetch more Exercises.
 - Media queries for different sized screens - Currently this looks terrible on Mobile, and could easily be improved by leveraging MUI's xs, sm, md, lg, xl props.
+- The unsafely set HTML coming back from the API should be sanitised before rendering. Otherwise we potentially leave the app open to Cross Site Scripting via HTML injection.
