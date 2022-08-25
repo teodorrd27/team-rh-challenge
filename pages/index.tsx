@@ -96,7 +96,7 @@ const Home: NextPage<StaticProps> = ({ muscles }) => {
           { selectedMuscleGroupId ?
               <Box sx={{ height: '100%'}}>
                 <Typography>Click through rows to explore an exercise&apos;s description</Typography>
-                <TableContainer sx={{ overflow: 'auto', maxHeight: 400, marginY: '20px', border: '1px solid black' }} >
+                <TableContainer sx={{ overflow: 'auto', maxHeight: '50vh', marginY: '20px', border: '1px solid black' }} >
                   <Table style={{ overflow: 'auto', height: '100%'}} sx={{ overflow: 'auto', height: '100%'}} aria-label='exercise-table'>
                     <TableHead>
                       <TableRow key={'header-row'}>
